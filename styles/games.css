@@ -20,7 +20,9 @@
 }
 
 .wake-lion {
-  width: min(70%, 320px);
+  width: auto;
+  max-width: min(76%, 340px);
+  max-height: 220px;
   filter: brightness(0.72) saturate(0.85);
   transition: filter 0.24s ease;
 }
@@ -75,7 +77,9 @@
 }
 
 .eye-stage img {
-  width: min(82%, 360px);
+  width: auto;
+  max-width: min(86%, 380px);
+  max-height: 250px;
   filter: saturate(0.92);
   transition: filter 0.32s ease, transform 0.32s ease;
 }

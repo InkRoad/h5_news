@@ -48,19 +48,20 @@ function renderScene(scene, index) {
 function renderVisual(type) {
   if (!type) return "";
   const map = {
-    cover: "lion-head-awake.svg",
-    campus: "campus-fair.svg",
-    sound: "sound-wave.svg",
-    cloth: "lion-cloth.svg",
-    training: "drum.svg",
-    poster: "training-ground.svg",
-    pattern: "pattern.svg",
-    team: "team-silhouette.svg",
-    silhouette: "team-silhouette.svg",
-    night: "training-ground.svg",
-    paper: "paper-canvas.svg",
+    cover: { src: "./assets/lion-head-cutout.png", alt: "醒狮狮头" },
+    campus: { src: "./info/mmexport1777114532410.jpg", alt: "龙狮团合影" },
+    sound: { src: "./info/mmexport1777114539509.jpg", alt: "校园招新现场的醒狮互动" },
+    cloth: { src: "./info/mmexport1777114553838.jpg", alt: "舞台上的醒狮表演" },
+    training: { src: "./info/mmexport1777114559086.jpg", alt: "夜晚训练场上的龙狮团队员" },
+    poster: { src: "./info/mmexport1777114565569.jpg", alt: "校内演出中的醒狮舞台" },
+    pattern: { src: "./info/mmexport1777114577771.jpg", alt: "龙狮团奖杯与传统纹样" },
+    team: { src: "./info/mmexport1777114566779.jpg", alt: "龙狮团演出后的集体合影" },
+    silhouette: { src: "./info/mmexport1777114567974.jpg", alt: "训练后队员围在一起" },
+    night: { src: "./info/mmexport1777114570529.jpg", alt: "夜间训练中的队友陪伴" },
+    paper: { src: "./info/mmexport1777114581516.jpg", alt: "成员与醒狮道具合影" },
   };
-  return `<figure class="scene-visual scene-visual--${type}"><img src="./assets/svg/${map[type]}" alt="" loading="lazy" /></figure>`;
+  const image = map[type];
+  return `<figure class="scene-visual scene-visual--${type}"><img src="${image.src}" alt="${image.alt}" loading="lazy" /></figure>`;
 }
 
 function observeScenes() {

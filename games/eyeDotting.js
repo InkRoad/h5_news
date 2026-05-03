@@ -10,7 +10,7 @@ export function initEyeDottingGame(container, onComplete) {
   container.innerHTML = `
     <section class="eye-game" aria-label="醒狮点睛小游戏">
       <div class="eye-stage">
-        <img src="./assets/svg/eye-dotting-lion.svg" alt="待点睛的醒狮狮头" />
+        <img src="./assets/lion-head-cutout.png" alt="待点睛的醒狮狮头" />
         ${steps.map((step) => `<button class="dot-hotspot dot-hotspot--${step.key}" type="button" data-key="${step.key}" aria-label="点亮${step.label}"></button>`).join("")}
       </div>
       <p class="game-message">请按顺序点亮：左眼、右眼、天庭、狮口。</p>

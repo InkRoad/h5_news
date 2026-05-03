@@ -6,9 +6,19 @@ dist/
 # Raw interview/source materials and oversized media are kept local.
 *.docx
 contact-sheet.jpg
+assets/info-photo-sheet.jpg
 app.js
 styles.css
 
 info/*
 !info/
-!info/bg.png
+!info/mmexport1777114532410.jpg
+!info/mmexport1777114539509.jpg
+!info/mmexport1777114553838.jpg
+!info/mmexport1777114559086.jpg
+!info/mmexport1777114565569.jpg
+!info/mmexport1777114566779.jpg
+!info/mmexport1777114567974.jpg
+!info/mmexport1777114570529.jpg
+!info/mmexport1777114577771.jpg
+!info/mmexport1777114581516.jpg

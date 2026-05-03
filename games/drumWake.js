@@ -6,7 +6,7 @@ export function initDrumWakeGame(container, onComplete) {
   container.innerHTML = `
     <section class="drum-game" aria-label="击鼓唤醒舞狮小游戏">
       <div class="wake-stage">
-        <img class="wake-lion" src="./assets/svg/lion-head-sleep.svg" alt="等待唤醒的醒狮狮头" />
+        <img class="wake-lion" src="./assets/lion-head-cutout.png" alt="等待唤醒的醒狮狮头" />
         <div class="wake-glow" aria-hidden="true"></div>
       </div>
       <button class="drum-button" type="button" aria-label="点击鼓面唤醒舞狮">
@@ -37,7 +37,7 @@ export function initDrumWakeGame(container, onComplete) {
 
     if (count >= target) {
       completed = true;
-      lion.src = "./assets/svg/lion-head-awake.svg";
+      lion.style.filter = "brightness(1.18) saturate(1.24)";
       message.textContent = "那一天，她停在了龙狮团的摊位前。";
       button.textContent = "已唤醒";
       button.setAttribute("disabled", "");
