@@ -32,14 +32,6 @@ export const scenes = [
     question: "从“偶然接触”到“坚持至今”——你和舞狮的故事是怎么开始的？",
   },
   {
-    id: "eye-game",
-    type: "game",
-    game: "eye",
-    eyebrow: "互动 01",
-    title: "醒狮点睛",
-    body: "按顺序点亮左眼、右眼、天庭与狮口，亲手唤醒狮头的神韵。",
-  },
-  {
     id: "beginning",
     type: "story",
     eyebrow: "第一章 被鼓声叫住",
@@ -70,6 +62,14 @@ export const scenes = [
     title: "一开始，她只是想学打鼓",
     body: "一开始我其实只想学打鼓，可看着师兄师姐们舞狮时意气风发的模样，心里也生出了向往，也想自己舞出灵动有神韵的狮子，就这样一步步坚持了下来。",
     visual: "training",
+  },
+  {
+    id: "eye-game",
+    type: "game",
+    game: "eye",
+    eyebrow: "互动 01",
+    title: "醒狮点睛",
+    body: "按顺序点亮左眼、右眼、天庭与狮口，亲手唤醒狮头的神韵。",
   },
   {
     id: "drum-game",

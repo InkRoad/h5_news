@@ -4,6 +4,7 @@ import { initEyeDottingGame } from "../games/eyeDotting.js";
 
 const app = document.querySelector("#app");
 const progress = document.querySelector("#readProgress");
+let pageTween = 0;
 const gameInitializers = {
   drum: initDrumWakeGame,
   eye: initEyeDottingGame,
@@ -100,15 +101,8 @@ function initEnvelopeScenes() {
 
 function initQaScenes() {
   document.querySelectorAll(".typewriter-question").forEach((target) => {
-    const text = target.dataset.typewriter || "";
     target.textContent = "";
-    let index = 0;
-    const write = () => {
-      target.textContent = text.slice(0, index);
-      index += 1;
-      if (index <= text.length) window.setTimeout(write, 42);
-    };
-    write();
+    target.dataset.typed = "false";
   });
 
   document.querySelectorAll("[data-unlock]").forEach((slider) => {
@@ -167,8 +161,32 @@ function isTouchDevice() {
 function goToNextScene() {
   const scenesList = [...document.querySelectorAll(".scene")];
   const currentIndex = Math.round(app.scrollTop / app.clientHeight);
-  const next = scenesList[Math.min(scenesList.length - 1, currentIndex + 1)];
-  next?.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollToScene(Math.min(scenesList.length - 1, currentIndex + 1));
+}
+
+function scrollToScene(index) {
+  const scenesList = [...document.querySelectorAll(".scene")];
+  const target = scenesList[index];
+  if (!target) return;
+
+  const start = app.scrollTop;
+  const end = target.offsetTop;
+  const distance = end - start;
+  const duration = 1180;
+  const token = ++pageTween;
+  const startTime = performance.now();
+  const ease = (value) => value < 0.5
+    ? 4 * value * value * value
+    : 1 - Math.pow(-2 * value + 2, 3) / 2;
+
+  const step = (now) => {
+    if (token !== pageTween) return;
+    const progressValue = Math.min(1, (now - startTime) / duration);
+    app.scrollTop = start + distance * ease(progressValue);
+    if (progressValue < 1) window.requestAnimationFrame(step);
+  };
+
+  window.requestAnimationFrame(step);
 }
 
 function getCurrentScene() {
@@ -203,10 +221,31 @@ function renderVisual(type) {
 function observeScenes() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        startTypewriter(entry.target.querySelector(".typewriter-question"));
+      } else {
+        entry.target.classList.remove("is-visible");
+      }
     });
   }, { root: app, threshold: 0.46 });
   document.querySelectorAll(".scene").forEach((scene) => observer.observe(scene));
+}
+
+function startTypewriter(target) {
+  if (!target || target.dataset.typed === "true") return;
+  const text = target.dataset.typewriter || "";
+  target.dataset.typed = "true";
+  target.textContent = "";
+  let index = 0;
+
+  const write = () => {
+    target.textContent += text.charAt(index);
+    index += 1;
+    if (index < text.length) window.setTimeout(write, 64);
+  };
+
+  write();
 }
 
 function updateProgress() {
@@ -217,6 +256,10 @@ function updateProgress() {
 
 app.addEventListener("scroll", updateProgress, { passive: true });
 app.addEventListener("wheel", (event) => {
+  if (!isTouchDevice()) {
+    event.preventDefault();
+    return;
+  }
   if (shouldLockQaForward(event.deltaY)) event.preventDefault();
 }, { passive: false });
 

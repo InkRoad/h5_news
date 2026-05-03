@@ -9,8 +9,10 @@
   overflow-y: auto;
   overflow-x: hidden;
   scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   overscroll-behavior-y: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   width: min(100%, 750px);
   margin: 0;
   transform: translateX(-50%);
@@ -18,6 +20,12 @@
     linear-gradient(90deg, rgba(99, 18, 15, 0.08), transparent 10%, transparent 90%, rgba(99, 18, 15, 0.08)),
     var(--paper);
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.28);
+}
+
+.h5-shell::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .scene {
@@ -31,19 +39,19 @@
   align-items: center;
   overflow: hidden;
   padding: max(18px, env(safe-area-inset-top)) 18px max(58px, env(safe-area-inset-bottom));
-  opacity: 0.28;
-  transform: translateY(32px);
-  transition: opacity 0.72s ease, transform 0.72s ease;
+  opacity: 0;
+  transform: translateY(22px) scale(0.985);
+  transition: opacity 1.05s ease, transform 1.05s ease;
 }
 
 .scene.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .scene:first-child {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .scene__inner {
