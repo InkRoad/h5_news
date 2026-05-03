@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 360" role="img" aria-label="醒狮点睛狮头">
+  <!-- Hotspots: left eye 36% 42%, right eye 64% 42%, forehead 50% 25%, mouth 50% 63% -->
+  <rect width="420" height="360" fill="none"/>
+  <path d="M70 158c-25-49 20-95 74-76 25-57 107-57 133 0 55-20 100 27 73 78 48 27 39 101-18 116-31 66-212 66-244 0-56-15-67-89-18-118Z" fill="#dfa22d" stroke="#65120f" stroke-width="9"/>
+  <path d="M110 130c52-58 148-58 200 0-44-18-156-18-200 0Z" fill="#ffd75b"/>
+  <circle cx="150" cy="154" r="48" fill="#fff3cf" stroke="#65120f" stroke-width="8"/>
+  <circle cx="270" cy="154" r="48" fill="#fff3cf" stroke="#65120f" stroke-width="8"/>
+  <circle cx="150" cy="154" r="20" fill="#1a0e0a"/><circle cx="270" cy="154" r="20" fill="#1a0e0a"/>
+  <path d="M186 238h48l-9 40h-30Z" fill="#7d160f"/>
+  <path d="M178 96h64l-32-44Z" fill="#c72219"/>
+  <g fill="#f8c84c" stroke="#65120f" stroke-width="5"><circle cx="210" cy="88" r="18"/><circle cx="166" cy="106" r="12"/><circle cx="254" cy="106" r="12"/></g>
+  <path d="M114 230q96 45 192 0" fill="none" stroke="#fff0b8" stroke-width="12" stroke-linecap="round"/>
+</svg>

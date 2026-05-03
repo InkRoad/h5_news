@@ -1,0 +1,61 @@
+:root {
+  color-scheme: light;
+  --red: #b5221b;
+  --deep-red: #63120f;
+  --gold: #e0a438;
+  --amber: #ffe0a0;
+  --ink: #21110d;
+  --paper: #fff5df;
+  --muted: #765346;
+  --jade: #0d756b;
+  --shadow: 0 22px 48px rgba(69, 17, 11, 0.22);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: #3b100c;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 219, 122, 0.24), transparent 34rem),
+    linear-gradient(180deg, #4b130f 0%, #fff1d0 18%, #fff7e7 72%, #56120e 100%);
+}
+
+button {
+  font: inherit;
+  border: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img { max-width: 100%; display: block; }
+
+.read-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 20;
+  height: 4px;
+  background: rgba(255, 232, 178, 0.22);
+}
+
+.read-progress span {
+  display: block;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--gold), #fff2b8, var(--red));
+}
+
+.eyebrow {
+  margin: 0 0 0.55rem;
+  color: var(--jade);
+  font-size: clamp(0.78rem, 3.4vw, 0.95rem);
+  font-weight: 900;
+}

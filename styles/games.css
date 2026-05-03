@@ -1,0 +1,142 @@
+.game-mount {
+  border-radius: 8px;
+  border: 1px solid rgba(181, 34, 27, 0.18);
+  background: rgba(255, 248, 232, 0.9);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.wake-stage,
+.eye-stage {
+  position: relative;
+  min-height: 250px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 70%, rgba(255, 224, 148, 0.62), transparent 42%),
+    linear-gradient(180deg, #651611, #240907);
+}
+
+.wake-lion {
+  width: min(70%, 320px);
+  filter: brightness(0.72) saturate(0.85);
+  transition: filter 0.24s ease;
+}
+
+.wake-glow {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 232, 123, 0.62), transparent 62%);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.drum-button {
+  width: min(46vw, 170px);
+  margin: 14px auto 10px;
+  display: block;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.drum-button img { width: 100%; }
+.drum-button:disabled { opacity: 0.78; color: var(--deep-red); font-weight: 900; }
+
+.drum-game.is-hit .drum-button,
+.drum-game.is-hit .wake-stage {
+  animation: drumHit 0.18s ease;
+}
+
+.game-progress {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(99, 18, 15, 0.14);
+}
+
+.game-progress span {
+  display: block;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--gold), var(--red));
+  transition: transform 0.22s ease;
+}
+
+.game-message {
+  margin: 12px 0 0;
+  color: var(--deep-red);
+  font-weight: 900;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.eye-stage img {
+  width: min(82%, 360px);
+  filter: saturate(0.92);
+  transition: filter 0.32s ease, transform 0.32s ease;
+}
+
+.dot-hotspot {
+  position: absolute;
+  width: 16%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 230, 120, 0.1);
+}
+
+.dot-hotspot::after {
+  content: "";
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(circle, #fff7b2, rgba(255, 196, 44, 0.72), transparent 72%);
+  box-shadow: 0 0 28px rgba(255, 221, 84, 0.9);
+}
+
+.dot-hotspot.is-lit::after { opacity: 1; }
+.dot-hotspot--left-eye { left: 31%; top: 35%; }
+.dot-hotspot--right-eye { right: 31%; top: 35%; }
+.dot-hotspot--forehead { left: 42%; top: 21%; }
+.dot-hotspot--mouth { left: 42%; top: 56%; }
+
+.dot-list {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 14px 0 0;
+  list-style: none;
+}
+
+.dot-list li {
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--muted);
+  background: rgba(99, 18, 15, 0.06);
+}
+
+.dot-list li.is-lit {
+  color: var(--deep-red);
+  background: rgba(255, 222, 130, 0.52);
+  font-weight: 900;
+}
+
+.eye-stage.is-awake img {
+  filter: brightness(1.18) saturate(1.28);
+  transform: scale(1.02);
+}
+
+.eye-stage.is-wrong { animation: wrongTap 0.18s ease; }
+
+@keyframes drumHit {
+  50% { transform: scale(0.985); }
+}
+
+@keyframes wrongTap {
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}

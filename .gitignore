@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+node_modules/
+dist/
+
+# Raw interview/source materials and oversized media are kept local.
+*.docx
+contact-sheet.jpg
+app.js
+styles.css
+
+info/*
+!info/
+!info/bg.png

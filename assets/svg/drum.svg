@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-label="中式大鼓">
+  <defs><radialGradient id="skin" cx="50%" cy="42%"><stop offset="0" stop-color="#ffe6a3"/><stop offset="1" stop-color="#d98931"/></radialGradient></defs>
+  <circle cx="110" cy="110" r="96" fill="#9d2119"/>
+  <circle cx="110" cy="110" r="78" fill="url(#skin)" stroke="#6a130f" stroke-width="8"/>
+  <circle cx="110" cy="110" r="28" fill="#5b2314" opacity=".28"/>
+  <g fill="#f2bf4b" stroke="#6a130f" stroke-width="3">
+    <circle cx="110" cy="20" r="9"/><circle cx="110" cy="200" r="9"/><circle cx="20" cy="110" r="9"/><circle cx="200" cy="110" r="9"/>
+    <circle cx="47" cy="47" r="8"/><circle cx="173" cy="47" r="8"/><circle cx="47" cy="173" r="8"/><circle cx="173" cy="173" r="8"/>
+  </g>
+  <path d="M42 182 178 46" stroke="#4d2014" stroke-width="10" stroke-linecap="round"/>
+  <path d="M54 194 190 58" stroke="#f0b23a" stroke-width="5" stroke-linecap="round"/>
+</svg>

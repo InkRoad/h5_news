@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" role="img" aria-label="未唤醒醒狮狮头">
+  <rect width="360" height="300" fill="none"/>
+  <path d="M70 128c-18-38 15-74 56-61 18-45 84-45 105 0 42-14 76 23 56 63 36 21 31 79-12 91-23 54-164 54-188 0-42-12-50-70-17-93Z" fill="#d89b2b" stroke="#71140f" stroke-width="8"/>
+  <path d="M100 114c40-45 120-45 160 0-26-13-133-13-160 0Z" fill="#f6c84b"/>
+  <circle cx="133" cy="145" r="39" fill="#fff3cc" stroke="#71140f" stroke-width="7"/>
+  <circle cx="227" cy="145" r="39" fill="#fff3cc" stroke="#71140f" stroke-width="7"/>
+  <path d="M112 143q21 18 42 0M206 143q21 18 42 0" fill="none" stroke="#2c1510" stroke-width="8" stroke-linecap="round"/>
+  <path d="M144 203h72l-14 28h-44Z" fill="#72140f"/>
+  <path d="M152 91h56l-28-36Z" fill="#b91f18"/>
+  <g fill="#f2bf4b"><circle cx="180" cy="80" r="14"/><circle cx="144" cy="94" r="10"/><circle cx="216" cy="94" r="10"/></g>
+</svg>
