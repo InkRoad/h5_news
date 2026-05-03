@@ -18,10 +18,26 @@
 
 .scene--cover .scene__text p { color: #fff0c4; }
 
+.scene--reporter {
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255, 224, 147, 0.42), transparent 34rem),
+    linear-gradient(180deg, #fff4db, #ffe6b5 64%, #7a1a14);
+}
+
+.scene--reporter .scene-visual--cover {
+  background: transparent;
+}
+
+.scene--qa {
+  background:
+    linear-gradient(180deg, rgba(255, 247, 225, 0.94), rgba(255, 229, 178, 0.92)),
+    url("../assets/lion-dance-bg.png") center / cover no-repeat;
+}
+
 .scene-visual {
   margin: 0;
   min-height: 0;
-  padding: 10px;
+  padding: 8px;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -35,14 +51,14 @@
   width: auto;
   max-width: 100%;
   height: auto;
-  max-height: 42svh;
+  max-height: 34svh;
   object-fit: contain;
   animation: floatVisual 4.8s ease-in-out infinite;
 }
 
 .scene-visual--cover img {
   max-width: min(82%, 420px);
-  max-height: 36svh;
+  max-height: 30svh;
 }
 
 .scene-visual:not(.scene-visual--cover) img {
@@ -64,6 +80,167 @@
 
 .scene.is-complete .scene__text {
   box-shadow: 0 0 0 2px rgba(224, 164, 56, 0.28), var(--shadow);
+}
+
+.qa-card {
+  max-height: 45svh;
+  overflow-y: auto;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(99, 18, 15, 0.18);
+  background: rgba(255, 250, 238, 0.92);
+  box-shadow: var(--shadow);
+}
+
+.qa-card h2 {
+  margin: 0;
+  color: var(--deep-red);
+  font-size: clamp(1.1rem, 4.6vw, 1.45rem);
+  line-height: 1.4;
+}
+
+.qa-card p {
+  margin: 0.6rem 0 0;
+  color: #4b2117;
+  font-size: clamp(0.88rem, 3.45vw, 1rem);
+  line-height: 1.62;
+}
+
+.qa-card__label {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff7e2 !important;
+  background: var(--deep-red);
+  font-weight: 900;
+}
+
+.letter-stage {
+  position: relative;
+  height: min(46svh, 430px);
+  min-height: 310px;
+  overflow: hidden;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 34%, rgba(255, 238, 172, 0.68), transparent 36%),
+    linear-gradient(180deg, #6b1712, #2c0907);
+  box-shadow: var(--shadow);
+}
+
+.envelope-button {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  z-index: 2;
+  width: min(78%, 420px);
+  aspect-ratio: 1.62 / 1;
+  transform: translateX(-50%);
+  background: transparent;
+}
+
+.envelope-body,
+.envelope-lid {
+  position: absolute;
+  inset: auto 0 0;
+  height: 66%;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(135deg, #f7c668, #dc8d2f);
+  box-shadow: inset 0 0 0 3px rgba(100, 18, 15, 0.25);
+}
+
+.envelope-body {
+  z-index: 4;
+}
+
+.envelope-lid {
+  z-index: 6;
+  inset: 0 0 auto;
+  height: 58%;
+  clip-path: polygon(0 0, 50% 82%, 100% 0);
+  border-radius: 8px 8px 0 0;
+  transform-origin: top;
+  transition: transform 0.35s ease;
+}
+
+.letter-stage.is-open .envelope-lid {
+  transform: rotateX(58deg);
+}
+
+.envelope-thumbs {
+  position: absolute;
+  left: 50%;
+  bottom: 48%;
+  z-index: 5;
+  width: 82%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  transform: translateX(-50%);
+}
+
+.envelope-thumbs img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: #fff8e8;
+  border: 3px solid #fff8e8;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(45, 10, 7, 0.25);
+}
+
+.photo-popups img {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  z-index: 8;
+  width: min(62%, 260px);
+  max-height: 70%;
+  object-fit: contain;
+  border: 6px solid #fff8e8;
+  border-radius: 6px;
+  background: #fff8e8;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.65) rotate(-5deg);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  box-shadow: 0 20px 36px rgba(0, 0, 0, 0.28);
+}
+
+.photo-popups img:nth-child(2) {
+  transform: translate(-50%, -50%) scale(0.65) rotate(4deg);
+}
+
+.photo-popups img:nth-child(3) {
+  transform: translate(-50%, -50%) scale(0.65) rotate(-1deg);
+}
+
+.photo-popups img.is-visible {
+  opacity: 1;
+}
+
+.photo-popups img:nth-child(1).is-visible {
+  transform: translate(-74%, -62%) scale(0.84) rotate(-7deg);
+}
+
+.photo-popups img:nth-child(2).is-visible {
+  transform: translate(-50%, -50%) scale(0.88) rotate(3deg);
+}
+
+.photo-popups img:nth-child(3).is-visible {
+  transform: translate(-26%, -36%) scale(0.84) rotate(-2deg);
+}
+
+.letter-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  margin: 0;
+  color: #fff3c9;
+  text-align: center;
+  font-weight: 900;
+  font-size: 0.9rem;
 }
 
 @keyframes floatVisual {

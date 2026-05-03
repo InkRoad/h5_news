@@ -18,12 +18,15 @@ function render() {
       mount.closest(".scene").classList.add("is-complete");
     });
   });
+  initEnvelopeScenes();
   observeScenes();
 }
 
 function renderScene(scene, index) {
   const visual = renderVisual(scene.visual);
   const game = scene.type === "game" ? `<div class="game-mount" data-game-mount="${scene.game}"></div>` : "";
+  const qa = scene.type === "qa" ? renderQa(scene) : "";
+  const envelope = scene.type === "envelope" ? renderEnvelope(scene) : "";
   const count = String(index + 1).padStart(2, "0");
   return `
     <section class="scene scene--${scene.type}" id="${scene.id}">
@@ -39,10 +42,57 @@ function renderScene(scene, index) {
           ${scene.subtitle ? `<p class="subtitle">${scene.subtitle}</p>` : ""}
           <p>${scene.body}</p>
         </article>
+        ${qa}
+        ${envelope}
         ${game}
       </div>
     </section>
   `;
+}
+
+function renderQa(scene) {
+  return `
+    <article class="qa-card">
+      <p class="qa-card__label">Q</p>
+      <h2>${scene.question}</h2>
+      <p class="qa-card__label">A</p>
+      <p>${scene.answer}</p>
+    </article>
+  `;
+}
+
+function renderEnvelope(scene) {
+  return `
+    <section class="letter-stage" data-envelope>
+      <button class="envelope-button" type="button" aria-label="打开采访照片信封">
+        <span class="envelope-lid"></span>
+        <span class="envelope-body"></span>
+        <span class="envelope-thumbs">
+          ${scene.photos.map((src, photoIndex) => `<img src="${src}" alt="采访照片 ${photoIndex + 1}" loading="lazy" />`).join("")}
+        </span>
+      </button>
+      <div class="photo-popups" aria-live="polite">
+        ${scene.photos.map((src, photoIndex) => `<img src="${src}" alt="弹出的采访照片 ${photoIndex + 1}" data-photo="${photoIndex}" />`).join("")}
+      </div>
+      <p class="letter-hint">轻点信封，照片会依次弹出。</p>
+    </section>
+  `;
+}
+
+function initEnvelopeScenes() {
+  document.querySelectorAll("[data-envelope]").forEach((stage) => {
+    const button = stage.querySelector(".envelope-button");
+    const photos = [...stage.querySelectorAll(".photo-popups img")];
+    const hint = stage.querySelector(".letter-hint");
+    let opened = false;
+    button.addEventListener("click", () => {
+      if (opened) return;
+      opened = true;
+      photos.forEach((photo) => photo.classList.add("is-visible"));
+      stage.classList.add("is-open");
+      hint.textContent = "三张照片都已展开，继续向上滑动。";
+    });
+  });
 }
 
 function renderVisual(type) {
@@ -69,25 +119,25 @@ function observeScenes() {
     entries.forEach((entry) => {
       if (entry.isIntersecting) entry.target.classList.add("is-visible");
     });
-  }, { threshold: 0.28 });
+  }, { root: app, threshold: 0.46 });
   document.querySelectorAll(".scene").forEach((scene) => observer.observe(scene));
 }
 
 function updateProgress() {
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  const ratio = max <= 0 ? 0 : window.scrollY / max;
+  const max = app.scrollHeight - app.clientHeight;
+  const ratio = max <= 0 ? 0 : app.scrollTop / max;
   progress.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
 }
 
 document.querySelector("#restartPage").addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  app.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 document.querySelector("#shareHint").addEventListener("click", () => {
   window.alert("可点击浏览器右上角菜单，将这只青春醒狮分享给朋友。");
 });
 
-window.addEventListener("scroll", updateProgress, { passive: true });
+app.addEventListener("scroll", updateProgress, { passive: true });
 window.addEventListener("resize", updateProgress);
 render();
 updateProgress();

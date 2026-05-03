@@ -1,6 +1,19 @@
 .h5-shell {
+  position: fixed;
+  inset: 0;
+  left: 50%;
+  height: 100vh;
+  height: 100svh;
+  max-height: 100vh;
+  max-height: 100svh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
   width: min(100%, 750px);
-  margin: 0 auto;
+  margin: 0;
+  transform: translateX(-50%);
   background:
     linear-gradient(90deg, rgba(99, 18, 15, 0.08), transparent 10%, transparent 90%, rgba(99, 18, 15, 0.08)),
     var(--paper);
@@ -8,10 +21,16 @@
 }
 
 .scene {
+  min-height: 100vh;
   min-height: 100svh;
+  height: 100vh;
+  height: 100svh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   display: grid;
   align-items: center;
-  padding: max(24px, env(safe-area-inset-top)) 18px max(42px, env(safe-area-inset-bottom));
+  overflow: hidden;
+  padding: max(18px, env(safe-area-inset-top)) 18px max(58px, env(safe-area-inset-bottom));
   opacity: 0.28;
   transform: translateY(32px);
   transition: opacity 0.72s ease, transform 0.72s ease;
@@ -22,10 +41,17 @@
   transform: translateY(0);
 }
 
+.scene:first-child {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .scene__inner {
   display: grid;
-  gap: 18px;
+  gap: 12px;
   width: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .scene__meta {
@@ -38,7 +64,7 @@
 }
 
 .scene__text {
-  padding: 18px;
+  padding: 15px;
   border: 1px solid rgba(181, 34, 27, 0.18);
   border-radius: 8px;
   background: rgba(255, 249, 235, 0.88);
@@ -48,16 +74,16 @@
 .scene__text h1 {
   margin: 0;
   color: var(--deep-red);
-  font-size: clamp(2rem, 10vw, 4.8rem);
+  font-size: clamp(1.72rem, 8.8vw, 4.2rem);
   line-height: 1.02;
   letter-spacing: 0;
 }
 
 .scene__text p {
-  margin: 0.9rem 0 0;
+  margin: 0.72rem 0 0;
   color: #4b2117;
-  font-size: clamp(1rem, 4vw, 1.24rem);
-  line-height: 1.76;
+  font-size: clamp(0.92rem, 3.65vw, 1.16rem);
+  line-height: 1.62;
   font-weight: 650;
 }
 
@@ -67,13 +93,17 @@
 }
 
 .site-actions {
+  position: fixed;
+  left: 50%;
+  bottom: max(8px, env(safe-area-inset-bottom));
+  z-index: 18;
   width: min(100%, 750px);
-  margin: 0 auto;
+  transform: translateX(-50%);
   display: grid;
   grid-template-columns: 1fr 1.3fr;
   gap: 10px;
-  padding: 18px;
-  background: #56120e;
+  padding: 0 14px;
+  background: transparent;
 }
 
 .site-actions button {
@@ -86,5 +116,5 @@
 
 @media (min-width: 760px) {
   .scene { padding-inline: 42px; }
-  .scene__inner { gap: 24px; }
+  .scene__inner { gap: 16px; }
 }
