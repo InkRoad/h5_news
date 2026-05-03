@@ -19,6 +19,8 @@ function render() {
     });
   });
   initEnvelopeScenes();
+  initQaScenes();
+  initDesktopKeys();
   observeScenes();
 }
 
@@ -53,11 +55,12 @@ function renderScene(scene, index) {
 function renderQa(scene) {
   return `
     <article class="qa-card">
-      <p class="qa-card__label">Q</p>
-      <h2>${scene.question}</h2>
-      <p class="qa-card__label">A</p>
-      <p>${scene.answer}</p>
+      <h2 class="typewriter-question" data-typewriter="${scene.question}"></h2>
     </article>
+    <section class="unlock-slider" data-unlock>
+      <span class="unlock-track">滑动进入朱朱的故事</span>
+      <button class="unlock-thumb" type="button" aria-label="向右滑动进入下一页">›</button>
+    </section>
   `;
 }
 
@@ -84,15 +87,98 @@ function initEnvelopeScenes() {
     const button = stage.querySelector(".envelope-button");
     const photos = [...stage.querySelectorAll(".photo-popups img")];
     const hint = stage.querySelector(".letter-hint");
-    let opened = false;
+    let index = 0;
     button.addEventListener("click", () => {
-      if (opened) return;
-      opened = true;
-      photos.forEach((photo) => photo.classList.add("is-visible"));
+      if (index >= photos.length) return;
+      photos[index].classList.add("is-visible");
+      index += 1;
       stage.classList.add("is-open");
-      hint.textContent = "三张照片都已展开，继续向上滑动。";
+      hint.textContent = index === photos.length ? "三张照片都已展开，继续向上滑动。" : "继续轻点，展开下一张照片。";
     });
   });
+}
+
+function initQaScenes() {
+  document.querySelectorAll(".typewriter-question").forEach((target) => {
+    const text = target.dataset.typewriter || "";
+    target.textContent = "";
+    let index = 0;
+    const write = () => {
+      target.textContent = text.slice(0, index);
+      index += 1;
+      if (index <= text.length) window.setTimeout(write, 42);
+    };
+    write();
+  });
+
+  document.querySelectorAll("[data-unlock]").forEach((slider) => {
+    const thumb = slider.querySelector(".unlock-thumb");
+    let startX = 0;
+    let currentX = 0;
+    let dragging = false;
+
+    const maxTravel = () => slider.clientWidth - thumb.clientWidth - 8;
+    const setPosition = (x) => {
+      currentX = Math.max(0, Math.min(x, maxTravel()));
+      thumb.style.transform = `translateX(${currentX}px)`;
+      slider.style.setProperty("--unlock-progress", `${currentX / maxTravel()}`);
+    };
+    const finish = () => {
+      if (!dragging) return;
+      dragging = false;
+      if (currentX > maxTravel() * 0.78) {
+        setPosition(maxTravel());
+        slider.closest(".scene")?.classList.add("qa-unlocked");
+        goToNextScene();
+      } else {
+        setPosition(0);
+      }
+    };
+
+    thumb.addEventListener("pointerdown", (event) => {
+      dragging = true;
+      startX = event.clientX - currentX;
+      thumb.setPointerCapture(event.pointerId);
+    });
+    thumb.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+      setPosition(event.clientX - startX);
+    });
+    thumb.addEventListener("pointerup", finish);
+    thumb.addEventListener("pointercancel", finish);
+  });
+}
+
+function initDesktopKeys() {
+  window.addEventListener("keydown", (event) => {
+    if (event.code !== "Space" || isTouchDevice()) return;
+    if (getCurrentScene()?.classList.contains("scene--qa")) return;
+    const active = document.activeElement;
+    if (active && ["BUTTON", "A", "INPUT", "TEXTAREA"].includes(active.tagName)) return;
+    event.preventDefault();
+    goToNextScene();
+  });
+}
+
+function isTouchDevice() {
+  return window.matchMedia("(pointer: coarse)").matches;
+}
+
+function goToNextScene() {
+  const scenesList = [...document.querySelectorAll(".scene")];
+  const currentIndex = Math.round(app.scrollTop / app.clientHeight);
+  const next = scenesList[Math.min(scenesList.length - 1, currentIndex + 1)];
+  next?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function getCurrentScene() {
+  const scenesList = [...document.querySelectorAll(".scene")];
+  return scenesList[Math.round(app.scrollTop / app.clientHeight)] || scenesList[0];
+}
+
+function shouldLockQaForward(delta) {
+  const scene = getCurrentScene();
+  return delta > 0 && scene?.classList.contains("scene--qa") && !scene.classList.contains("qa-unlocked");
 }
 
 function renderVisual(type) {
@@ -129,15 +215,19 @@ function updateProgress() {
   progress.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
 }
 
-document.querySelector("#restartPage").addEventListener("click", () => {
-  app.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-document.querySelector("#shareHint").addEventListener("click", () => {
-  window.alert("可点击浏览器右上角菜单，将这只青春醒狮分享给朋友。");
-});
-
 app.addEventListener("scroll", updateProgress, { passive: true });
+app.addEventListener("wheel", (event) => {
+  if (shouldLockQaForward(event.deltaY)) event.preventDefault();
+}, { passive: false });
+
+let touchStartY = 0;
+app.addEventListener("touchstart", (event) => {
+  touchStartY = event.touches[0]?.clientY ?? 0;
+}, { passive: true });
+app.addEventListener("touchmove", (event) => {
+  const currentY = event.touches[0]?.clientY ?? touchStartY;
+  if (shouldLockQaForward(touchStartY - currentY)) event.preventDefault();
+}, { passive: false });
 window.addEventListener("resize", updateProgress);
 render();
 updateProgress();

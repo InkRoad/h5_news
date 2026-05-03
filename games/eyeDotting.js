@@ -40,7 +40,7 @@ export function initEyeDottingGame(container, onComplete) {
 
       if (index === steps.length) {
         stage.classList.add("is-awake");
-        message.textContent = "当狮头被点亮，她也在周复一周的训练里，慢慢读懂了龙狮背后的传统文化。";
+        message.textContent = "给沉睡新狮注入灵气、开光成瑞兽，从此不再是普通道具，有灵性、能镇宅、辟邪、招财。";
         onComplete?.();
       }
     });

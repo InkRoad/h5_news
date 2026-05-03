@@ -92,28 +92,6 @@
   font-weight: 900;
 }
 
-.site-actions {
-  position: fixed;
-  left: 50%;
-  bottom: max(8px, env(safe-area-inset-bottom));
-  z-index: 18;
-  width: min(100%, 750px);
-  transform: translateX(-50%);
-  display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: 10px;
-  padding: 0 14px;
-  background: transparent;
-}
-
-.site-actions button {
-  min-height: 46px;
-  border-radius: 8px;
-  color: #fff7dd;
-  background: linear-gradient(135deg, var(--deep-red), var(--red));
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-}
-
 @media (min-width: 760px) {
   .scene { padding-inline: 42px; }
   .scene__inner { gap: 16px; }

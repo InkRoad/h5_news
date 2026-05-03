@@ -38,7 +38,7 @@ export function initDrumWakeGame(container, onComplete) {
     if (count >= target) {
       completed = true;
       lion.style.filter = "brightness(1.18) saturate(1.24)";
-      message.textContent = "那一天，她停在了龙狮团的摊位前。";
+      message.textContent = "锣鼓震气场，唤醒已开光的瑞狮灵魂，正式现世、下凡祈福，仪式到此狮已“成活”。";
       button.textContent = "已唤醒";
       button.setAttribute("disabled", "");
       onComplete?.();
