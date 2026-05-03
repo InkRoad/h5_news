@@ -15,6 +15,9 @@ info/*
 !info/email1.jpg
 !info/email2.jpg
 !info/email3.jpg
+!info/voice1.mp3
+!info/drawing/
+!info/drawing/*.png
 !info/mmexport1777114532410.jpg
 !info/mmexport1777114539509.jpg
 !info/mmexport1777114553838.jpg
