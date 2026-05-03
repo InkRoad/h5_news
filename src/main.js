@@ -4,7 +4,14 @@ import { initEyeDottingGame } from "../games/eyeDotting.js";
 
 const app = document.querySelector("#app");
 const progress = document.querySelector("#readProgress");
+const typeSound = new Audio("./info/voice1.mp3");
+typeSound.loop = true;
 let pageTween = 0;
+const drawingFrames = Array.from({ length: 7 }, (_, index) => `./info/drawing/frame (${index + 1}).png`);
+drawingFrames.forEach((src) => {
+  const image = new Image();
+  image.src = src;
+});
 const gameInitializers = {
   drum: initDrumWakeGame,
   eye: initEyeDottingGame,
@@ -17,6 +24,7 @@ function render() {
     const mount = document.querySelector(`[data-game-mount="${scene.game}"]`);
     gameInitializers[scene.game]?.(mount, () => {
       mount.closest(".scene").classList.add("is-complete");
+      if (mount.contains(document.activeElement)) document.activeElement.blur();
     });
   });
   initEnvelopeScenes();
@@ -31,19 +39,21 @@ function renderScene(scene, index) {
   const qa = scene.type === "qa" ? renderQa(scene) : "";
   const envelope = scene.type === "envelope" ? renderEnvelope(scene) : "";
   const count = String(index + 1).padStart(2, "0");
+  const subtitle = scene.subtitle ? `<p class="subtitle">${escapeHtml(scene.subtitle)}</p>` : "";
+  const body = scene.body ? `<p>${escapeHtml(scene.body)}</p>` : "";
   return `
     <section class="scene scene--${scene.type}" id="${scene.id}">
       <div class="scene__inner">
         <div class="scene__meta">
           <span>${count}</span>
-          <span>${scene.eyebrow}</span>
+          <span>${escapeHtml(scene.eyebrow)}</span>
         </div>
         ${visual}
         <article class="scene__text">
-          <p class="eyebrow">${scene.eyebrow}</p>
-          <h1>${scene.title}</h1>
-          ${scene.subtitle ? `<p class="subtitle">${scene.subtitle}</p>` : ""}
-          <p>${scene.body}</p>
+          <p class="eyebrow">${escapeHtml(scene.eyebrow)}</p>
+          <h1>${escapeHtml(scene.title)}</h1>
+          ${subtitle}
+          ${body}
         </article>
         ${qa}
         ${envelope}
@@ -54,14 +64,17 @@ function renderScene(scene, index) {
 }
 
 function renderQa(scene) {
-  return `
-    <article class="qa-card">
-      <h2 class="typewriter-question" data-typewriter="${scene.question}"></h2>
-    </article>
+  const unlock = scene.unlock ? `
     <section class="unlock-slider" data-unlock>
       <span class="unlock-track">滑动进入朱朱的故事</span>
       <button class="unlock-thumb" type="button" aria-label="向右滑动进入下一页">›</button>
     </section>
+  ` : "";
+  return `
+    <article class="qa-card">
+      <h2 class="typewriter-question" data-typewriter="${escapeHtml(scene.question)}"></h2>
+    </article>
+    ${unlock}
   `;
 }
 
@@ -91,7 +104,9 @@ function initEnvelopeScenes() {
     let index = 0;
     button.addEventListener("click", () => {
       if (index >= photos.length) return;
-      photos[index].classList.add("is-visible");
+      const photo = photos[index];
+      photo.classList.add("is-visible", "is-featured");
+      window.setTimeout(() => photo.classList.remove("is-featured"), 1000);
       index += 1;
       stage.classList.add("is-open");
       hint.textContent = index === photos.length ? "三张照片都已展开，继续向上滑动。" : "继续轻点，展开下一张照片。";
@@ -146,9 +161,16 @@ function initQaScenes() {
 function initDesktopKeys() {
   window.addEventListener("keydown", (event) => {
     if (event.code !== "Space" || isTouchDevice()) return;
-    if (getCurrentScene()?.classList.contains("scene--qa")) return;
+    if (shouldLockQaForward(1)) return;
     const active = document.activeElement;
-    if (active && ["BUTTON", "A", "INPUT", "TEXTAREA"].includes(active.tagName)) return;
+    const currentScene = getCurrentScene();
+    if (active && ["BUTTON", "A", "INPUT", "TEXTAREA"].includes(active.tagName)) {
+      if (currentScene?.classList.contains("is-complete") && currentScene.contains(active)) {
+        active.blur();
+      } else {
+        return;
+      }
+    }
     event.preventDefault();
     goToNextScene();
   });
@@ -196,7 +218,10 @@ function getCurrentScene() {
 
 function shouldLockQaForward(delta) {
   const scene = getCurrentScene();
-  return delta > 0 && scene?.classList.contains("scene--qa") && !scene.classList.contains("qa-unlocked");
+  return delta > 0
+    && scene?.classList.contains("scene--qa")
+    && scene.querySelector("[data-unlock]")
+    && !scene.classList.contains("qa-unlocked");
 }
 
 function renderVisual(type) {
@@ -213,9 +238,11 @@ function renderVisual(type) {
     silhouette: { src: "./info/mmexport1777114567974.jpg", alt: "训练后队员围在一起" },
     night: { src: "./info/mmexport1777114570529.jpg", alt: "夜间训练中的队友陪伴" },
     paper: { src: "./info/mmexport1777114581516.jpg", alt: "成员与醒狮道具合影" },
+    drawing: { src: drawingFrames[0], alt: "画纸上逐渐绘出的醒狮", drawing: true },
   };
   const image = map[type];
-  return `<figure class="scene-visual scene-visual--${type}"><img src="${image.src}" alt="${image.alt}" loading="lazy" /></figure>`;
+  const drawingAttrs = image.drawing ? ` data-drawing-frame="0" data-drawing-played="false"` : "";
+  return `<figure class="scene-visual scene-visual--${type}"><img src="${image.src}" alt="${image.alt}" loading="lazy"${drawingAttrs} /></figure>`;
 }
 
 function observeScenes() {
@@ -224,6 +251,7 @@ function observeScenes() {
       if (entry.isIntersecting) {
         entry.target.classList.add("is-visible");
         startTypewriter(entry.target.querySelector(".typewriter-question"));
+        startDrawingAnimation(entry.target.querySelector("[data-drawing-frame]"));
       } else {
         entry.target.classList.remove("is-visible");
       }
@@ -238,14 +266,67 @@ function startTypewriter(target) {
   target.dataset.typed = "true";
   target.textContent = "";
   let index = 0;
+  playTypeSound();
 
   const write = () => {
     target.textContent += text.charAt(index);
     index += 1;
-    if (index < text.length) window.setTimeout(write, 64);
+    if (index < text.length) {
+      window.setTimeout(write, 64);
+    } else {
+      stopTypeSound();
+    }
   };
 
   write();
+}
+
+function playTypeSound() {
+  typeSound.pause();
+  typeSound.currentTime = 0;
+  typeSound.play().catch(() => {});
+}
+
+function stopTypeSound() {
+  typeSound.pause();
+  typeSound.currentTime = 0;
+}
+
+function startDrawingAnimation(image) {
+  if (!image || image.dataset.drawingPlayed === "true") return;
+  image.dataset.drawingPlayed = "true";
+  const scene = image.closest(".scene");
+
+  const waitForSettledPage = () => {
+    if (getCurrentScene() !== scene || Math.abs(app.scrollTop - scene.offsetTop) > 4) {
+      window.requestAnimationFrame(waitForSettledPage);
+      return;
+    }
+    playDrawingFrames(image);
+  };
+
+  waitForSettledPage();
+}
+
+function playDrawingFrames(image) {
+  let index = 0;
+  const advance = () => {
+    image.src = drawingFrames[index];
+    image.dataset.drawingFrame = String(index);
+    index += 1;
+    if (index < drawingFrames.length) window.setTimeout(advance, 420);
+  };
+  advance();
+}
+
+function escapeHtml(value = "") {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;",
+  }[char]));
 }
 
 function updateProgress() {
