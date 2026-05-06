@@ -1,6 +1,6 @@
 import { scenes } from "./content.js";
-import { initDrumWakeGame } from "../games/drumWake.js";
-import { initEyeDottingGame } from "../games/eyeDotting.js";
+import { initDrumWakeGame } from "../games/drumWake.js?v=ppt-flow-10";
+import { initEyeDottingGame } from "../games/eyeDotting.js?v=ppt-flow-10";
 
 const app = document.querySelector("#app");
 const progress = document.querySelector("#readProgress");

@@ -1,5 +1,11 @@
 export function initDrumWakeGame(container, onComplete) {
-  const target = 10;
+  const target = 5;
+  const drumSounds = Array.from({ length: target }, (_, index) => `./info/audio-pad/audio-pad (${index + 1}).mp3`);
+  const drumAudioPads = drumSounds.map((src) => {
+    const audio = new Audio(src);
+    audio.preload = "auto";
+    return audio;
+  });
   let count = 0;
   let completed = false;
 
@@ -26,6 +32,7 @@ export function initDrumWakeGame(container, onComplete) {
 
   button.addEventListener("click", () => {
     if (completed) return;
+    playDrumSound(drumAudioPads[count]);
     count += 1;
     const ratio = count / target;
     progress.style.transform = `scaleX(${ratio})`;
@@ -46,4 +53,10 @@ export function initDrumWakeGame(container, onComplete) {
       message.textContent = `再敲 ${target - count} 下，狮头就要醒了。`;
     }
   });
+}
+
+function playDrumSound(source) {
+  if (!source) return;
+  const audio = source.cloneNode();
+  audio.play().catch(() => {});
 }
