@@ -1,8 +1,9 @@
 {
+  "private": true,
   "scripts": {
     "dev": "python -m http.server 5173",
     "preview": "python -m http.server 5173",
-    "build": "node -e \"console.log('Pure static project: copy index.html, src, games, styles, assets and info to dist if needed.')\""
+    "build": "node scripts/build-vercel.mjs"
   },
   "devDependencies": {}
 }
